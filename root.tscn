@@ -1,0 +1,55 @@
+[gd_scene load_steps=4 format=3 uid="uid://ct4l808ib7i8p"]
+
+[ext_resource type="Script" path="res://root.gd" id="1_pfv6b"]
+[ext_resource type="Script" path="res://PannedCamera.gd" id="2_jkg75"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_w8ox7"]
+blend_mode = 3
+
+[node name="Root" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_pfv6b")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+script = ExtResource("2_jkg75")
+
+[node name="Line2D" type="Line2D" parent="."]
+
+[node name="FileDialog" type="FileDialog" parent="."]
+title = "Select image"
+initial_position = 2
+size = Vector2i(600, 400)
+ok_button_text = "Open"
+dialog_hide_on_ok = true
+file_mode = 0
+access = 2
+
+[node name="GUI" type="CanvasLayer" parent="."]
+
+[node name="MenuBar" type="MenuBar" parent="GUI"]
+top_level = true
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="File" type="PopupMenu" parent="GUI/MenuBar"]
+item_count = 2
+item_0/text = "Load"
+item_1/text = "Save"
+item_1/id = 1
+
+[node name="Background" type="TextureRect" parent="."]
+z_index = -1
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="PlayerWindow" type="Window" parent="."]
+
+[node name="Camera2D2" type="Camera2D" parent="PlayerWindow"]
+script = ExtResource("2_jkg75")
+
+[node name="Fog" type="Sprite2D" parent="."]
+material = SubResource("CanvasItemMaterial_w8ox7")
+
+[connection signal="file_selected" from="FileDialog" to="." method="_on_file_dialog_file_selected"]
