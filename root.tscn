@@ -17,7 +17,7 @@ script = ExtResource("2_jkg75")
 [node name="Line2D" type="Line2D" parent="."]
 
 [node name="FileDialog" type="FileDialog" parent="."]
-title = "Select image"
+title = "Open a File"
 initial_position = 2
 size = Vector2i(600, 400)
 ok_button_text = "Open"
