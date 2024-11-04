@@ -51,6 +51,11 @@ position = Vector2i(0, 36)
 [node name="Camera2D2" type="Camera2D" parent="PlayerWindow"]
 script = ExtResource("2_jkg75")
 
+[node name="PlayerRoot" type="Node2D" parent="PlayerWindow"]
+
+[node name="Fog" type="Sprite2D" parent="PlayerWindow"]
+material = SubResource("CanvasItemMaterial_w8ox7")
+
 [node name="Fog" type="Sprite2D" parent="."]
 material = SubResource("CanvasItemMaterial_w8ox7")
 
