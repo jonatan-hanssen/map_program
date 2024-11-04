@@ -38,13 +38,15 @@ item_0/text = "Load"
 item_1/text = "Save"
 item_1/id = 1
 
-[node name="Background" type="TextureRect" parent="."]
+[node name="BackgroundNode" type="Node2D" parent="."]
+
+[node name="Background" type="TextureRect" parent="BackgroundNode"]
 z_index = -1
-layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="PlayerWindow" type="Window" parent="."]
+position = Vector2i(0, 36)
 
 [node name="Camera2D2" type="Camera2D" parent="PlayerWindow"]
 script = ExtResource("2_jkg75")
