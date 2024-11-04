@@ -51,6 +51,7 @@ var COLOR = Color.BLUE
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	get_window().title = "DM Window"
 	file_menu.connect('id_pressed', _on_file_id_pressed)
 	settings_menu.connect('id_pressed', _on_settings_id_pressed)
 	file_dialog.add_filter("*.png, *.jpg, *.jpeg, *.map", "Images/.map files")
@@ -81,7 +82,7 @@ func update_brushes(value: int = 0) -> void:
 
 
 func update_fog(pos, erase: bool = false):
-	var offset = Vector2(blend_rect_size / 2, blend_rect_size / 2) - Vector2(map_image_width / 2, map_image_height / 2)
+	var offset = Vector2(blend_rect_size / 2, blend_rect_size / 2) - Vector2(map_image_width * 0.6, map_image_height * 0.6)
 	var blend_rect = Rect2(Vector2.ZERO, Vector2.ONE * blend_rect_size)
 	if not erase:
 		dm_fog_image.blend_rect(light_brush, blend_rect, pos - offset)
@@ -204,10 +205,10 @@ func load_map(path: String) -> void:
 		map_image_height = map_image.get_size()[1]
 
 
-		dm_fog_image = Image.create(map_image_width, map_image_height, false, Image.FORMAT_RGBAH)
+		dm_fog_image = Image.create(img_width * 1.2, img_height * 1.2, false, Image.FORMAT_RGBAH)
 		dm_fog_image.fill(Color(0.5, 0.5, 0.5, 1))
 
-		player_fog_image = Image.create(map_image_width, map_image_height, false, Image.FORMAT_RGBAH)
+		player_fog_image = Image.create(img_width * 1.2, img_height * 1.2, false, Image.FORMAT_RGBAH)
 		player_fog_image.fill(Color(0, 0, 0, 1))
 
 	dm_fog_texture = ImageTexture.create_from_image(dm_fog_image)
@@ -221,7 +222,7 @@ func load_map(path: String) -> void:
 	image_texture.set_image(map_image)
 
 	background.texture = image_texture
-	background_node.position = -Vector2(map_image_width / 2, map_image_height / 2)
+	background_node.position = -Vector2(img_width * 0.6, img_height * 0.6)
 
 	# second window stuff
 	player_window.add_child(background_node.duplicate())
