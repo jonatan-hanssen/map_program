@@ -23,6 +23,7 @@ ok_button_text = "Open"
 dialog_hide_on_ok = true
 file_mode = 0
 access = 2
+use_native_dialog = true
 
 [node name="GUI" type="CanvasLayer" parent="."]
 
@@ -55,7 +56,9 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="PlayerWindow" type="Window" parent="."]
-position = Vector2i(0, 36)
+title = "Player Window"
+initial_position = 2
+size = Vector2i(500, 500)
 
 [node name="Camera2D2" type="Camera2D" parent="PlayerWindow"]
 script = ExtResource("2_jkg75")
@@ -71,6 +74,7 @@ material = SubResource("CanvasItemMaterial_w8ox7")
 [node name="FileDialog2" type="FileDialog" parent="."]
 dialog_hide_on_ok = true
 access = 2
+use_native_dialog = true
 
 [connection signal="file_selected" from="FileDialog" to="." method="_on_file_dialog_file_selected"]
 [connection signal="mouse_entered" from="GUI/MenuBar" to="." method="_on_menu_bar_mouse_entered"]
