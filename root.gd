@@ -1,6 +1,5 @@
 extends Control
 
-
 @onready var file_menu: PopupMenu = $GUI/MenuBar/File
 @onready var settings_menu: PopupMenu = $GUI/MenuBar/Settings
 @onready var file_dialog: FileDialog = $FileDialog
@@ -12,23 +11,24 @@ extends Control
 @onready var background_node = $BackgroundNode
 @onready var background = $BackgroundNode/Background
 
-
-var hovering_over_gui : bool = false
-
 const LightTexture = preload('res://Light.png')
 const DarkTexture = preload('res://Dark.png')
 const GrayTexture = preload('res://Gray.png')
 
-var blend_rect_size : int = 50
 
+var hovering_over_gui : bool = false
+var mod_held : bool = false
 var black_circle_bool : bool = false
 
-var mod_held : bool = false
 
-var image : Image
+var blend_rect_size : int = 50
 
-var img_height : int
-var img_width : int
+
+
+var map_image : Image
+
+var map_image_height : int
+var map_image_width : int
 
 var dm_fog_image : Image
 var dm_fog_texture : ImageTexture
@@ -81,7 +81,7 @@ func update_brushes(value: int = 0) -> void:
 
 
 func update_fog(pos, erase: bool = false):
-	var offset = Vector2(blend_rect_size / 2, blend_rect_size / 2) - Vector2(img_width / 2, img_height / 2)
+	var offset = Vector2(blend_rect_size / 2, blend_rect_size / 2) - Vector2(map_image_width / 2, map_image_height / 2)
 	var blend_rect = Rect2(Vector2.ZERO, Vector2.ONE * blend_rect_size)
 	if not erase:
 		dm_fog_image.blend_rect(light_brush, blend_rect, pos - offset)
@@ -154,7 +154,6 @@ func _draw() -> void:
 
 	# draw_arc(get_global_mouse_position(), blend_rect_size * 0.5, 0.0, 2 * 3.141592, 100, circle_color, 1)
 	draw_circle(get_global_mouse_position(), blend_rect_size * 0.5, circle_color, false, 1)
-	print(get_global_mouse_position())
 
 func _on_file_id_pressed(id: int) -> void:
 	if id == 0:
@@ -180,35 +179,35 @@ func load_map(path: String) -> void:
 		var reader = ZIPReader.new()
 		reader.open(path)
 		dm_fog_image = Image.new()
-		dm_fog_image.load_png_from_buffer(reader.read_file("fog1.png"))
+		dm_fog_image.load_png_from_buffer(reader.read_file("dm_fog.png"))
 		dm_fog_image.convert(Image.FORMAT_RGBAH)
 
 		player_fog_image = Image.new()
-		player_fog_image.load_png_from_buffer(reader.read_file("fog2.png"))
+		player_fog_image.load_png_from_buffer(reader.read_file("player_fog.png"))
 		player_fog_image.convert(Image.FORMAT_RGBAH)
 
-		image = Image.new()
-		image.load_png_from_buffer(reader.read_file("image.png"))
-		image.convert(Image.FORMAT_RGBAH)
+		map_image = Image.new()
+		map_image.load_png_from_buffer(reader.read_file("map.png"))
+		map_image.convert(Image.FORMAT_RGBAH)
 
-		img_width = image.get_size()[0]
-		img_height = image.get_size()[1]
+		map_image_width = map_image.get_size()[0]
+		map_image_height = map_image.get_size()[1]
 
 		reader.close()
 
 	else:
-		image = Image.new()
-		image.load(path)
-		image.convert(Image.FORMAT_RGBAH)
+		map_image = Image.new()
+		map_image.load(path)
+		map_image.convert(Image.FORMAT_RGBAH)
 
-		img_width = image.get_size()[0]
-		img_height = image.get_size()[1]
+		map_image_width = map_image.get_size()[0]
+		map_image_height = map_image.get_size()[1]
 
 
-		dm_fog_image = Image.create(img_width, img_height, false, Image.FORMAT_RGBAH)
+		dm_fog_image = Image.create(map_image_width, map_image_height, false, Image.FORMAT_RGBAH)
 		dm_fog_image.fill(Color(0.5, 0.5, 0.5, 1))
 
-		player_fog_image = Image.create(img_width, img_height, false, Image.FORMAT_RGBAH)
+		player_fog_image = Image.create(map_image_width, map_image_height, false, Image.FORMAT_RGBAH)
 		player_fog_image.fill(Color(0, 0, 0, 1))
 
 	dm_fog_texture = ImageTexture.create_from_image(dm_fog_image)
@@ -219,10 +218,10 @@ func load_map(path: String) -> void:
 
 
 	var image_texture = ImageTexture.new()
-	image_texture.set_image(image)
+	image_texture.set_image(map_image)
 
 	background.texture = image_texture
-	background_node.position = -Vector2(img_width / 2, img_height / 2)
+	background_node.position = -Vector2(map_image_width / 2, map_image_height / 2)
 
 	# second window stuff
 	player_window.add_child(background_node.duplicate())
@@ -231,12 +230,12 @@ func load_map(path: String) -> void:
 func _on_file_dialog_2_file_selected(path:String) -> void:
 	var writer = ZIPPacker.new()
 	writer.open(path)
-	writer.start_file("fog1.png")
+	writer.start_file("dm_fog.png")
 	writer.write_file(dm_fog_image.save_png_to_buffer())
-	writer.start_file("fog2.png")
+	writer.start_file("player_fog.png")
 	writer.write_file(player_fog_image.save_png_to_buffer())
-	writer.start_file("image.png")
-	writer.write_file(image.save_png_to_buffer())
+	writer.start_file("map.png")
+	writer.write_file(map_image.save_png_to_buffer())
 	writer.close_file()
 
 	writer.close()
