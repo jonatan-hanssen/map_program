@@ -20,10 +20,12 @@ var hovering_over_gui : bool = false
 var mod_held : bool = false
 var black_circle_bool : bool = false
 
+var undo_list : Array = []
 
 var blend_rect_size : int = 50
 
 
+var fog_scaling : float = 1.0
 
 var map_image : Image
 
@@ -82,7 +84,7 @@ func update_brushes(value: int = 0) -> void:
 
 
 func update_fog(pos, erase: bool = false):
-	var offset = Vector2(blend_rect_size / 2, blend_rect_size / 2) - Vector2(map_image_width * 0.6, map_image_height * 0.6)
+	var offset = Vector2(blend_rect_size / 2, blend_rect_size / 2) - Vector2(map_image_width * fog_scaling * 0.5, map_image_height * fog_scaling * 0.5)
 	var blend_rect = Rect2(Vector2.ZERO, Vector2.ONE * blend_rect_size)
 	if not erase:
 		dm_fog_image.blend_rect(light_brush, blend_rect, pos - offset)
@@ -112,6 +114,13 @@ func _input(event: InputEvent) -> void:
 			black_circle_bool = not black_circle_bool
 			settings_menu.set_item_checked(0, black_circle_bool)
 
+	if event is InputEventKey:
+		if event.pressed and event.keycode == KEY_Z:
+			for i in range(len(undo_list)):
+				update_fog(undo_list[i][0], not undo_list[i][1])
+			# undo_list.pop_back()
+			print(undo_list)
+
 	if event.is_action_pressed('mod'):
 		mod_held = true
 
@@ -132,18 +141,22 @@ func _input(event: InputEvent) -> void:
 			m1_pressed = event.pressed
 
 			if m1_pressed:
+				# undo_list.append([get_global_mouse_position(), false])
 				update_fog(get_global_mouse_position())
 
 		if event.button_index == MOUSE_BUTTON_RIGHT:
 			m2_pressed = event.pressed
 
 			if m2_pressed:
+				# undo_list.append([get_global_mouse_position(), true])
 				update_fog(get_global_mouse_position(), true)
 
 	elif event is InputEventMouseMotion:
 		if m1_pressed:
+			# undo_list.append([get_global_mouse_position(), false])
 			update_fog(get_global_mouse_position())
 		elif m2_pressed:
+			# undo_list.append([get_global_mouse_position(), true])
 			update_fog(get_global_mouse_position(), true)
 
 func _draw() -> void:
@@ -205,10 +218,10 @@ func load_map(path: String) -> void:
 		map_image_height = map_image.get_size()[1]
 
 
-		dm_fog_image = Image.create(img_width * 1.2, img_height * 1.2, false, Image.FORMAT_RGBAH)
+		dm_fog_image = Image.create(map_image_width * fog_scaling, map_image_height * fog_scaling, false, Image.FORMAT_RGBAH)
 		dm_fog_image.fill(Color(0.5, 0.5, 0.5, 1))
 
-		player_fog_image = Image.create(img_width * 1.2, img_height * 1.2, false, Image.FORMAT_RGBAH)
+		player_fog_image = Image.create(map_image_width * fog_scaling, map_image_height * fog_scaling, false, Image.FORMAT_RGBAH)
 		player_fog_image.fill(Color(0, 0, 0, 1))
 
 	dm_fog_texture = ImageTexture.create_from_image(dm_fog_image)
@@ -222,9 +235,8 @@ func load_map(path: String) -> void:
 	image_texture.set_image(map_image)
 
 	background.texture = image_texture
-	background_node.position = -Vector2(img_width * 0.6, img_height * 0.6)
+	background_node.position = -Vector2(map_image_width * fog_scaling * 0.5, map_image_height * fog_scaling * 0.5)
 
-	# second window stuff
 	player_window.add_child(background_node.duplicate())
 
 
