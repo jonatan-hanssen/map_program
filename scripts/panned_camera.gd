@@ -16,6 +16,8 @@ var left_held : bool = false
 var up_held : bool = false
 var down_held : bool = false
 
+signal mouse_pos_signal(pos)
+
 func _input(event: InputEvent) -> void:
 	if event is InputEventKey:
 		if event.keycode == KEY_SHIFT:
@@ -47,10 +49,12 @@ func _input(event: InputEvent) -> void:
 		if event.button_index == MOUSE_BUTTON_WHEEL_UP and not shift_held:
 			target_zoom = min(target_zoom + ZOOM_INCREMENT, MAX_ZOOM)
 			zoom = Vector2.ONE * target_zoom
+			mouse_pos_signal.emit(get_global_mouse_position())
 
 		if event.button_index == MOUSE_BUTTON_WHEEL_DOWN and not shift_held:
 			target_zoom = max(target_zoom - ZOOM_INCREMENT, MIN_ZOOM)
 			zoom = Vector2.ONE * target_zoom
+			mouse_pos_signal.emit(get_global_mouse_position())
 
 	if event is InputEventMouseMotion:
 		if event.button_mask == MOUSE_BUTTON_MASK_MIDDLE:
@@ -59,10 +63,14 @@ func _input(event: InputEvent) -> void:
 func _physics_process(delta):
 	if left_held:
 		position.x -= MOVE_SPEED * delta / zoom.x
+		mouse_pos_signal.emit(get_global_mouse_position())
 	if right_held:
 		position.x += MOVE_SPEED * delta / zoom.x
+		mouse_pos_signal.emit(get_global_mouse_position())
 	if up_held:
 		position.y -= MOVE_SPEED * delta / zoom.x
+		mouse_pos_signal.emit(get_global_mouse_position())
 	if down_held:
 		position.y += MOVE_SPEED * delta / zoom.x
+		mouse_pos_signal.emit(get_global_mouse_position())
 

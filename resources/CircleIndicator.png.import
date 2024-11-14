@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c6pohfcppboxw"
-path="res://.godot/imported/BlackSquareIndicator.png-e9da1d787542b1feca96d61daf66951b.ctex"
+uid="uid://1np6rnqhfykl"
+path="res://.godot/imported/CircleIndicator.png-069a07de996c9a140588b6c386bc8441.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resources/BlackSquareIndicator.png"
-dest_files=["res://.godot/imported/BlackSquareIndicator.png-e9da1d787542b1feca96d61daf66951b.ctex"]
+source_file="res://resources/CircleIndicator.png"
+dest_files=["res://.godot/imported/CircleIndicator.png-069a07de996c9a140588b6c386bc8441.ctex"]
 
 [params]
 

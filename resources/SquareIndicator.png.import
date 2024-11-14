@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d4jhljw62jtm1"
-path="res://.godot/imported/WhiteSquareIndicator.png-eca70d8cd9d6b571b2e68d5dd73f7011.ctex"
+uid="uid://c8itw7e1fcvb3"
+path="res://.godot/imported/SquareIndicator.png-67d76e62b6cb38d3bbe6661312fe6746.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resources/WhiteSquareIndicator.png"
-dest_files=["res://.godot/imported/WhiteSquareIndicator.png-eca70d8cd9d6b571b2e68d5dd73f7011.ctex"]
+source_file="res://resources/SquareIndicator.png"
+dest_files=["res://.godot/imported/SquareIndicator.png-67d76e62b6cb38d3bbe6661312fe6746.ctex"]
 
 [params]
 
